@@ -1,0 +1,3 @@
+MODEL=gemini/gemini-1.5-flash
+GEMINI_API_KEY=your-gemini-api-key
+SERPER_API_KEY=your-serper-api-key
