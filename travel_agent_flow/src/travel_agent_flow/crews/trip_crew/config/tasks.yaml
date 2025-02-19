@@ -1,0 +1,76 @@
+plan_itinerary:
+  description: >
+    Expand the city guide into a full 7-day travel itinerary with detailed
+    per-day plans, including weather forecasts, places to eat, packing suggestions,
+    and a budget breakdown. You MUST suggest actual places to visit, actual hotels to stay,
+    and actual restaurants to go to. This itinerary should cover all aspects of the trip,
+    from arrival to departure, integrating the city guide information with practical travel logistics.
+
+     **Parameters**: 
+      - City: {city}
+      - Trip Date: {travel_dates}
+      - Traveler Interests: {interests}
+  expected_output: >
+    A detailed 7-day travel itinerary for {city}, tailored to the traveler's interests {interests}, and covering the trip dates {travel_dates}.
+    The output must include:
+    
+    - A structured, day-by-day itinerary (Day 1 to Day 7) with actual places to visit, activities, and meal recommendations.
+    - A realistic budget breakdown per day, covering accommodation, meals, transportation, and activities.
+    - A recommended hotel or lodging for the entire stay, with a justification based on location, cost, and amenities.
+    - A packing checklist based on weather forecasts and planned activities.
+    - Transport logistics, including how to get from the airport to the hotel and daily commute options.
+    - Integration of local cultural experiences, adventure spots, relaxation opportunities, or nightlife depending on {interests}.
+    
+    The final itinerary should be structured, engaging, and practical, providing all essential information a traveler needs.
+  agent: travel_agent
+
+identify_city:
+  description: >
+    Analyze and select the best city for the trip based on specific
+    criteria such as weather patterns, seasonal events, and travel costs.
+    This task involves comparing multiple cities, considering factors like current weather
+    conditions, upcoming cultural or seasonal events, and overall travel expenses.
+    Your final answer must be a detailed report on the chosen city,
+    including actual flight costs, weather forecast, and attractions.
+
+    **Parameters**: 
+    - Origin: {origin}
+    - Cities: {city}
+    - Interests: {interests}
+    - Travel Date: {travel_dates}
+  expected_output: >
+    A comprehensive travel report selecting the best city from the given options. 
+    The report includes:
+    - The selected city with reasoning based on weather, events, and travel costs.
+    - A comparison of multiple cities based on key travel factors.
+    - Current and forecasted weather conditions.
+    - Major cultural or seasonal events happening during the travel dates.
+    - Approximate flight costs from {origin} to the selected city.
+    - Top attractions aligned with {interests}.
+    - A final recommendation justifying why this city is the best choice.
+  agent: city_selection_expert
+  
+gather_city_info:
+  description: >
+    Compile an in-depth guide for the selected city, gathering information about
+    key attractions, local customs, special events, and daily activity recommendations.
+    This guide should provide a thorough overview of what the city has to offer, including
+    hidden gems, cultural hotspots, must-visit landmarks, weather forecasts, and high-level costs.
+
+    **Parameters**: 
+    - Cities: {city}
+    - Interests: {interests}
+    - Travel Date: {travel_dates}
+
+  expected_output: >
+    A detailed city guide covering all essential aspects for travelers. The guide includes:
+    - A brief introduction to {city}, highlighting its significance and unique appeal.
+    - A list of must-visit attractions, including cultural landmarks, natural wonders, and entertainment spots.
+    - Recommendations on hidden gems and lesser-known experiences tailored to {interests}.
+    - A section on local customs, traditions, and etiquette to help travelers blend in and respect local culture.
+    - A breakdown of special events, festivals, or seasonal activities occurring during {travel_dates}.
+    - The latest weather forecast for the travel period, helping travelers prepare accordingly.
+    - Estimated costs for accommodation, food, transport, and activities at a high level.
+    - Suggested daily itineraries based on {interests}, ensuring an optimized experience.
+  agent: local_tour_guide
+
