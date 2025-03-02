@@ -27,7 +27,8 @@ class ShoppingAgentCrew():
         return Agent(
             config=self.agents_config['front_desk_agent'],
             llm=self.llm,
-            verbose=True
+            verbose=True,
+            max_rpm=10,
         )
     
     @agent
@@ -36,7 +37,8 @@ class ShoppingAgentCrew():
             config=self.agents_config['product_finder_agent'],
             verbose=True,
             llm=self.llm,
-            tools=[self.product_catalog_tool]  # Now the tool will get proper arguments via task config mapping.
+            tools=[self.product_catalog_tool],
+            max_rpm=10,  # Limit API calls  # Now the tool will get proper arguments via task config mapping.
         )
     
     @agent

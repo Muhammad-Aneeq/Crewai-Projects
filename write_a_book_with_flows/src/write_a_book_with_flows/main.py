@@ -105,11 +105,11 @@ class BookFlow(Flow[BookState]):
         # Create the filename by replacing spaces with underscores and adding .md extension
         filename = f"./{book_title.replace(' ', '_')}.md"
 
-        # Save the combined content into the file
-        with open(filename, "w", encoding="utf-8") as file:
-            file.write(book_content)
+        # # Save the combined content into the file
+        # with open(filename, "w", encoding="utf-8") as file:
+        #     file.write(book_content)
 
-        st.write(f"Book saved as {filename}")
+        # st.write(f"Book saved as {filename}")
         # Wrap the result in an awaitable coroutine
 
 
