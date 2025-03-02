@@ -12,7 +12,7 @@ generate_outline:
   description: >
     Create a book outline with chapters in sequential order based on the research findings. 
     Ensure that each chapter has a title and a brief description that highlights the topics and subtopics to be covered.
-    It's important to note that each chapter is only going to be 500 words or less.
+    It's important to note that each chapter is only going to be 50 words or less.
     Also, make sure that you do not duplicate any chapters or topics in the outline.
 
     Here is some additional information about the author's desired goal for the book:\n\n {goal}

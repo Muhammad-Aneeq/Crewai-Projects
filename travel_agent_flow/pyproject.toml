@@ -6,10 +6,12 @@ authors = [{ name = "Your Name", email = "you@example.com" }]
 requires-python = ">=3.10,<3.13"
 dependencies = [
     "crewai[tools]>=0.100.1,<1.0.0",
+    "streamlit>=1.42.2",
 ]
 
 [project.scripts]
 kickoff = "travel_agent_flow.main:kickoff"
+run_streamlit_app = "travel_agent_flow.main:run_streamlit_app"
 plot = "travel_agent_flow.main:plot"
 
 [build-system]

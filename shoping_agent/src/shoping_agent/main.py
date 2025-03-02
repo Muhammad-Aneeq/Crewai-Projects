@@ -225,7 +225,7 @@ def test():
 def run_streamlit_app():
     import sys
     import streamlit.web.cli
-    print(__file__)
+    print("__file__>>>",__file__)
     # Prepare the sys.argv list so that Streamlit knows which file to run.
     sys.argv = ["streamlit", "run", __file__]
     streamlit.web.cli.main()

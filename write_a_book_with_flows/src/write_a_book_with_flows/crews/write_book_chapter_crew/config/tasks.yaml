@@ -7,7 +7,7 @@ research_chapter:
     Here is the outline description for the chapter:\n\n {chapter_description}
 
     When researching, consider the following key points:
-    - you need to gather enough information to write a 500-word chapter
+    - you need to gather enough information to write a 50-word chapter
     - The chapter you are researching needs to fit in well with the rest of the chapters in the book.
 
     Here is the outline of the entire book:\n\n
@@ -19,7 +19,7 @@ research_chapter:
 write_chapter:
   description: >
     Write a well-structured chapter based on the chapter title, goal, and outline description. 
-    Each chapter should be written in markdown and should contain around 500 words.
+    Each chapter should be written in markdown and should contain around 50 words.
 
     Here is the topic for the book: {topic}
     Here is the title of the chapter: {chapter_title}

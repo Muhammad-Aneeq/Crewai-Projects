@@ -9,10 +9,12 @@ dependencies = [
     "google-generativeai>=0.8.4",
     "html2text>=2024.2.26",
     "sec-api>=1.0.28",
+    "streamlit>=1.42.2",
 ]
 
 [project.scripts]
 stock_analysis_crew = "stock_analysis_crew.main:run"
+run_streamlit_app = "stock_analysis_crew.main:run_streamlit_app"
 run_crew = "stock_analysis_crew.main:run"
 train = "stock_analysis_crew.main:train"
 replay = "stock_analysis_crew.main:replay"

@@ -2,7 +2,6 @@ from crewai import Agent, Task, Crew, Process
 from crewai.project import agent, task, crew, CrewBase
 from shoping_agent.tools.productcatalog_tool import ProductCatalogTool
 from shoping_agent.tools.userdata_tool import UserDataTool
-from shoping_agent.tools.inventory_tool import InventoryTool
 from crewai import LLM
 import os
 
@@ -21,7 +20,6 @@ class ShoppingAgentCrew():
     
     product_catalog_tool = ProductCatalogTool()
     user_data_tool = UserDataTool()
-    inventory_tool = InventoryTool()
 
     # =============Agents=============
     @agent
