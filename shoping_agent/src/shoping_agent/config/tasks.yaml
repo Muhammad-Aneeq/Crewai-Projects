@@ -1,0 +1,62 @@
+greeting_task:
+  description: >
+    Initiate the interaction by welcoming the user and asking how to assist.
+    Capture the user's initial intent and guide them to the appropriate shopping category or query.
+  expected_output: >
+    A friendly and engaging greeting message that asks the user how assistance is needed,
+    effectively setting the stage for further interaction.
+  agent: front_desk_agent
+
+category_selection_task:
+  description: >
+    Prompt the user to select or specify a product category (e.g., electronics, clothing).
+    Initiate a handoff from front_desk_agent to ProductFinderAgent for detailed queries.
+  expected_output: >
+    A clear user selection of a product category, setting the stage for detailed product queries.
+  agent: front_desk_agent
+
+product_query_task:
+  description: >
+    Ask for detailed product preferences by searching for products matching the query: {product_preference}
+  expected_output: >
+    If products are found, provide a list; otherwise, inform the user that no matching products are available.
+  agent: product_finder_agent
+  tool: ProductCatalogTool
+  tool_input: 
+    query: "{product_preference}"
+
+
+cart_management_task:
+  description: >
+    Manage the shopping cart by handling actions such as adding products, updating quantities, or removing items.
+    For example, you can create a cart for user with id {user_id} by using the action "{cart_action}" with cart data {cart_data},
+    get the current cart for user with id {user_id} using the action "{cart_action}",
+    or update the cart with new items using the action "{cart_action}" and cart data {cart_data}.
+  expected_output: >
+    A confirmation message with an updated cart summary reflecting the user's actions.
+  agent: checkout_agent
+  tool: UserDataTool
+  tool_input: 
+    user_id: "{user_id}"
+    action: "{cart_action}"
+    data: {"cart": "{cart_data}"}
+
+
+
+checkout_task:
+  description: >
+    Guide the user through the checkout process by reviewing the order.
+  expected_output: >
+    A complete checkout process that confirms the order details.
+  agent: checkout_agent
+
+order_confirmation_task:
+  description: >
+    Confirm the completed order by first checking if the user's cart contains items.
+    If the cart is not empty, provide an order summary, estimated delivery time, and a closing message.
+    If the cart is empty, inform the user that the product requested is not available at the moment.
+  expected_output: >
+    If the cart has items: An order confirmation message including the order summary and estimated delivery time.
+    If the cart is empty: A message stating "The product requested is not available at the moment. Please try again later or choose a different product."
+  agent: checkout_agent
+
