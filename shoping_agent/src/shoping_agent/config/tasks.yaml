@@ -1,3 +1,19 @@
+# Orchestrator Task - Orchestrating Task Flow Dynamically
+orchestrator_task:
+  description: >
+    Dynamically analyze the user's inputs "{user_query}" and their product preference "{product_preference}".
+    Based on these inputs, determine the most relevant tasks to execute.
+    Break down the shopping journey into smaller subtasks, delegate them to the appropriate worker agents 
+    (shopping assistant front_desk_agent, shopping specialist product_finder_agent, checkout_agent),
+    and synthesize their results. This task ensures the tasks are executed in the correct order based on the user's needs.
+  expected_output: >
+    A dynamic flow where tasks are assigned based on the user's needs "{user_query}" and "{product_preference}",
+    with the orchestrator synthesizing results from multiple worker agents.
+  tool_input:
+    user_query: "{user_query}"
+    product_preference: "{product_preference}"
+
+# Greeting Task - Initiating User Interaction
 greeting_task:
   description: >
     Initiate the interaction by welcoming the user and asking how to assist.
@@ -7,17 +23,20 @@ greeting_task:
     effectively setting the stage for further interaction.
   agent: front_desk_agent
 
+# Category Selection Task - Directing User to Product Categories
 category_selection_task:
   description: >
     Prompt the user to select or specify a product category (e.g., electronics, clothing).
-    Initiate a handoff from front_desk_agent to ProductFinderAgent for detailed queries.
+    Initiate a handoff from the shopping assistant front desk agent to the shopping specialist product finder agent.
   expected_output: >
     A clear user selection of a product category, setting the stage for detailed product queries.
   agent: front_desk_agent
 
+# Product Query Task - Product Search Based on Preferences
 product_query_task:
   description: >
-    Ask for detailed product preferences by searching for products matching the query: {product_preference}
+    Ask for detailed product preferences by searching for products matching the query: {product_preference}.
+    If products are found, provide a list; otherwise, inform the user that no matching products are available.
   expected_output: >
     If products are found, provide a list; otherwise, inform the user that no matching products are available.
   agent: product_finder_agent
@@ -25,31 +44,29 @@ product_query_task:
   tool_input: 
     query: "{product_preference}"
 
-
+# Cart Management Task - Managing Shopping Cart and Actions
 cart_management_task:
   description: >
     Manage the shopping cart by handling actions such as adding products, updating quantities, or removing items.
-    For example, you can create a cart for user with id {user_id} by using the action "{cart_action}" with cart data {cart_data},
-    get the current cart for user with id {user_id} using the action "{cart_action}",
-    or update the cart with new items using the action "{cart_action}" and cart data {cart_data}.
+    For example, create a cart for a user with id {user_id} by using the action "{cart_action}" with cart data {cart_data}.
   expected_output: >
     A confirmation message with an updated cart summary reflecting the user's actions.
   agent: checkout_agent
   tool: UserDataTool
-  tool_input: 
+  tool_input:
     user_id: "{user_id}"
     action: "{cart_action}"
-    data: {"cart": "{cart_data}"}
+    data: "{\"cart\": \"{cart_data}\"}"
 
-
-
+# Checkout Task - Reviewing and Confirming Order
 checkout_task:
   description: >
-    Guide the user through the checkout process by reviewing the order.
+    Guide the user through the checkout process by reviewing the order details and confirming the order.
   expected_output: >
-    A complete checkout process that confirms the order details.
+    A complete checkout process that confirms the order details, including product, price, and quantity.
   agent: checkout_agent
 
+# Order Confirmation Task - Final Confirmation and Delivery Details
 order_confirmation_task:
   description: >
     Confirm the completed order by first checking if the user's cart contains items.
@@ -59,4 +76,3 @@ order_confirmation_task:
     If the cart has items: An order confirmation message including the order summary and estimated delivery time.
     If the cart is empty: A message stating "The product requested is not available at the moment. Please try again later or choose a different product."
   agent: checkout_agent
-

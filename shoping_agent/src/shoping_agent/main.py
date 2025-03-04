@@ -4,6 +4,7 @@ from datetime import datetime
 from shoping_agent.crew import ShoppingAgentCrew
 import streamlit as st
 from shoping_agent.tools.dummy_data import dummy_products
+from crewai import Task
 
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
 
@@ -25,7 +26,6 @@ if "phase" not in st.session_state:
 
 # Function to update conversation history
 def update_conversation(role, message):
-    # Use emojis: 👤 for User and 🤖 for Agent.
     if role.lower() == "user":
         prefix = "👤"
     else:
@@ -43,10 +43,12 @@ def reset_conversation():
     if hasattr(st, "experimental_rerun"):
         st.experimental_rerun()
 
+# Function to trigger orchestration
 def process_order(inputs):
     with st.spinner("Processing your request..."):
         try:
             crew = st.session_state.crew_instance.crew()
+            # Now the orchestrator dynamically decides which agent should take action
             crew_response = crew.kickoff(inputs=inputs)
         except Exception as e:
             crew_response = f"An error occurred: {e}"
@@ -54,44 +56,32 @@ def process_order(inputs):
     return crew_response
 
 def update_inventory(product_name, quantity):
-    print("product>>>", product_name)
-    
     # Iterate through the inventory list to find the matching product by name
     for product in st.session_state.inventory:
         if product["name"] == product_name:
             # Update the quantity, ensuring it doesn't go below zero
             product["quantity"] -= quantity
-            
             if product["quantity"] < 0:
                 product["quantity"] = 0
-            
-            # No need to reassign st.session_state.inventory, as we're modifying the object in place.
-            print(f"Updated {product_name}: New quantity is {product['quantity']}")
             break
     else:
-        print(f"Product {product_name} not found in inventory.")
-
+        st.warning(f"Product {product_name} not found in inventory.")
 
 def show_inventory():
     st.write("### Inventory")
-    
-    # Use columns to create a grid-like structure
-    col1, col2, col3 = st.columns(3)  # You can adjust the number of columns based on your layout
-    
+    # Display inventory in grid format for a cleaner look
+    col1, col2, col3 = st.columns(3)
     with col1:
-        for product in dummy_products[0:7]:
+        for product in st.session_state.inventory[:7]:
             st.write(f"**{product['name']}**: {product['quantity']} in stock, Price: {product['price']}")
     
     with col2:
-        for product in dummy_products[7:14]:
+        for product in st.session_state.inventory[7:14]:
             st.write(f"**{product['name']}**: {product['quantity']} in stock, Price: {product['price']}")
     
     with col3:
-        for product in dummy_products[14:]:
+        for product in st.session_state.inventory[14:]:
             st.write(f"**{product['name']}**: {product['quantity']} in stock, Price: {product['price']}")
-
-
-# Call the functi
 
 def main():
     st.title("Shopping Assistant Chat")
@@ -126,8 +116,8 @@ def main():
             user_query = st.text_input("Additional Details", "", help="Any extra information about your query")
             user_id = st.text_input("User ID", st.session_state.user_id, help="Your unique user identifier")
             submitted = st.form_submit_button("Submit")
+        
         if submitted:
-            # Update the session state user_id in case it has changed.
             st.session_state.user_id = user_id
 
             # Build the input dictionary
@@ -142,7 +132,7 @@ def main():
             # Append the user submission to the conversation history.
             update_conversation("User", f"Product: '{product_preference}', Query: '{user_query}', User ID: '{user_id}'")
 
-            # Process the order with the provided inputs.
+            # Process the order with the provided inputs using orchestration
             final_output = process_order(inputs)
 
             st.write("### Final Output:")
@@ -163,7 +153,6 @@ def run():
     """
     Run the shopping crew.
     """
-
     inputs = {
     'product_preference': "wireless headphones with noise-cancelling",  # Explicit value passed here
     'user_query': "Looking for a high-quality audio experience.",
