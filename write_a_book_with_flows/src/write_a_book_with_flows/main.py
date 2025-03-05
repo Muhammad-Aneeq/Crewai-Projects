@@ -11,8 +11,6 @@ import asyncio
 import streamlit as st
 
 
-
-
 class BookState(BaseModel):
     id: uuid.UUID = uuid.uuid4()
     title: str = "The Current State of AI in February 2025"
@@ -34,6 +32,7 @@ class BookFlow(Flow[BookState]):
 
     @start()
     def generate_book_outline(self):
+        st.info("Generating Book Outline...")
         output = (
             OutlineCrew()
             .crew()
@@ -41,14 +40,12 @@ class BookFlow(Flow[BookState]):
         )
 
         chapters = output["chapters"]
-        print("Chapters:", chapters)
 
         self.state.book_outline = chapters
         return chapters
 
     @listen(generate_book_outline)
     async def write_chapters(self):
-        
         tasks = []
 
         async def write_single_chapter(chapter_outline):
@@ -73,18 +70,22 @@ class BookFlow(Flow[BookState]):
             chapter = Chapter(title=title, content=content)
             return chapter
 
+        st.markdown("<h3 style='font-size: 24px;'>Book Outline</h3>", unsafe_allow_html=True)
+
         for chapter_outline in self.state.book_outline:
-            st.write(f"Writing Chapter: {chapter_outline.title}")
+            st.write(f"Chapter Title: {chapter_outline.title}")
             st.write(f"Description: {chapter_outline.description}")
             # Schedule each chapter writing task
-
             task = asyncio.create_task(write_single_chapter(chapter_outline))
             tasks.append(task)
 
         # Await all chapter writing tasks concurrently
         st.info("Writing Book Chapters...")
         chapters = await asyncio.gather(*tasks)
-        # st.write("Newly generated chapters:", chapters)
+        st.write(f"<h3 style='font-size: 24px;'>Newly generated chapters:</h3>", unsafe_allow_html=True)
+        for chapter in chapters:
+            st.write(f"Chapter Title: {chapter.title}")
+            st.write(f"Content: {chapter.content}")
         self.state.book.extend(chapters)
 
     @listen(write_chapters)
@@ -104,18 +105,17 @@ class BookFlow(Flow[BookState]):
 
         # Create the filename by replacing spaces with underscores and adding .md extension
         filename = f"./{book_title.replace(' ', '_')}.md"
+        
+        # Save the combined content into the file
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(book_content)
 
-        # # Save the combined content into the file
-        # with open(filename, "w", encoding="utf-8") as file:
-        #     file.write(book_content)
-
-        # st.write(f"Book saved as {filename}")
-        # Wrap the result in an awaitable coroutine
+        st.write(f"<h3 style='font-size: 24px;'>Book saved as {filename}</h4>", unsafe_allow_html=True)
 
 
 
 # Define a helper function to run the asynchronous book flow using asyncio.
-def run_book_flow(title: str,topic: str, goal: str):
+def run_book_flow(title: str, topic: str, goal: str):
     # Instantiate BookFlow and update the state with user-provided values.
     book_flow = BookFlow()
     book_flow.state.title = title
@@ -123,7 +123,7 @@ def run_book_flow(title: str,topic: str, goal: str):
     book_flow.state.goal = goal
 
     # Run the asynchronous kickoff process.
-    asyncio.run(book_flow.kickoff())
+    book_flow.kickoff()
 
     # Return the filename and the book content for display/download.
     filename = f"./{book_flow.state.title.replace(' ', '_')}.md"
@@ -151,18 +151,18 @@ def main():
 
     # When the button is pressed, create a new BookState and run the flow
     if st.button("Generate Book"):
-        st.info("Processing... This may take a few moments.")
-        try:
-            filename, content = run_book_flow(title,topic, goal)
-            st.success("Book generation complete!")
+        with st.spinner("Generating your book... This may take a few moments."):
+            try:
+                filename, content = run_book_flow(title, topic, goal)
+                st.success("Book generation complete!")
 
-            # Display the generated book content
-            st.text_area("Generated Book", content, height=300)
+                # Display the generated book content
+                st.text_area("Generated Book", content, height=300)
 
-            # Provide a download button for the markdown file.
-            st.download_button("Download Book", content, file_name=filename.split("/")[-1])
-        except Exception as e:
-            st.error(f"An error occurred: {e}")
+                # Provide a download button for the markdown file.
+                st.download_button("Download Book", content, file_name=filename.split("/")[-1])
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":

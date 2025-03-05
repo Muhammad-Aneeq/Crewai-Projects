@@ -1,14 +1,13 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 class ChapterOutline(BaseModel):
-    title: str | None = None
-    description: str | None = None
+    title: Optional[str] = None
+    description: Optional[str] = None
 
 class BookOutline(BaseModel):
     chapters: List[ChapterOutline] = []
 
-
 class Chapter(BaseModel):
-    title: str | None = None
-    content: str | None = None
+    title: Optional[str] = None
+    content: Optional[str] = None
