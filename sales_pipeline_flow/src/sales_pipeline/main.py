@@ -16,10 +16,10 @@ class SalesFlow(Flow):
             leads = [
             {
                 "lead_data": {
-                    "name": "João Moura",
-                    "job_title": "Director of Engineering",
-                    "company": "Clearbit",
-                    "email": "joao@clearbit.com",
+                    "name": "Aneeq Khatri",
+                    "job_title": "Software Engineer",
+                    "company": "Panaverse",
+                    "email": "ak@panaverse.com",
                     "use_case": "Using AI Agent to do better data enrichment."
                 },
             },
@@ -54,17 +54,10 @@ class SalesFlow(Flow):
         emails = EmailEngagementCrew().crew().kickoff_for_each(scored_leads)
         return emails
     
-    # @listen(write_email)
-    # def send_email(self, emails):
-    #     # Here we would send the emails to the leads
-    #     print("emails>>>",emails)
-    #     self.state["final_output"] = emails
-    #     return emails
     @listen(write_email)
     def send_email(self, emails):
         # Store only the final "raw" output to be used in the UI.
         # If emails is a list, we extract the "raw" attribute from each element.
-        print("emails>>>",emails)
         final_results = []
         if isinstance(emails, list):
             for item in emails:
@@ -89,10 +82,10 @@ def main():
 
     st.header("Enter Lead Details")
     with st.form("lead_form"):
-        name = st.text_input("Name", "João Moura")
-        job_title = st.text_input("Job Title", "Director of Engineering")
-        company = st.text_input("Company", "Clearbit")
-        email = st.text_input("Email", "joao@clearbit.com")
+        name = st.text_input("Name", "Aneeq Khatri")
+        job_title = st.text_input("Job Title", "Software Engineer")
+        company = st.text_input("Company", "PIAIC")
+        email = st.text_input("Email", "ak@piaic.com")
         use_case = st.text_input("Use Case", "Using AI Agent to do better data enrichment.")
         submitted = st.form_submit_button("Run Pipeline")
 
