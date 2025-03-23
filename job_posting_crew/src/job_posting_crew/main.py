@@ -24,10 +24,10 @@ def train(inputs, n_iterations):
     Train the crew for a given number of iterations.
     """
     inputs = {
-        'company_domain':'careers.wbd.com',
-        'company_description': "Warner Bros. Discovery is a premier global media and entertainment company, offering audiences the world’s most differentiated and complete portfolio of content, brands and franchises across television, film, sports, news, streaming and gaming. We're home to the world’s best storytellers, creating world-class products for consumers",
-        'hiring_needs': 'Production Assistant, for a TV production set in Los Angeles in June 2025',
-        'specific_benefits':'Weekly Pay, Employee Meals, healthcare',
+    'company_domain': 'careers.microsoft.com',
+    'company_description': "Microsoft is a multinational technology company, recognized for creating software products such as Windows, Office, and Azure cloud services. We believe in empowering every person and organization to achieve more.",
+    'hiring_needs': 'Cloud Architect, for designing innovative cloud solutions in Redmond starting July 2025',
+    'specific_benefits': 'Retirement Plans, Employee Stock Purchase Program, Health and Wellness Benefits',
     }
     try:
         JobPostingCrew().crew().train(n_iterations=n_iterations, inputs=inputs)
@@ -49,11 +49,11 @@ def main():
 
     # Form to capture input data
     with st.form("job_posting_form"):
-        company_domain = st.text_input("Company Domain", "careers.wbd.com")
+        company_domain = st.text_input("Company Domain", "careers.microsoft.com")
         company_description = st.text_area("Company Description", 
-            "Warner Bros. Discovery is a premier global media and entertainment company, offering audiences the world’s most differentiated and complete portfolio of content, brands and franchises across television, film, sports, news, streaming and gaming. We're home to the world’s best storytellers, creating world-class products for consumers")
-        hiring_needs = st.text_input("Hiring Needs", "Production Assistant, for a TV production set in Los Angeles in June 2025")
-        specific_benefits = st.text_input("Specific Benefits", "Weekly Pay, Employee Meals, healthcare")
+            "Microsoft is a multinational technology company, recognized for creating software products such as Windows, Office, and Azure cloud services. We believe in empowering every person and organization to achieve more.")
+        hiring_needs = st.text_input("Hiring Needs","Cloud Architect, for designing innovative cloud solutions in Redmond starting July 2025")
+        specific_benefits = st.text_input("Specific Benefits","Retirement Plans, Employee Stock Purchase Program, Health and Wellness Benefits")
         n_iterations = None
         if mode == "Train":
             n_iterations = st.number_input("Number of Training Iterations", min_value=1, value=10, step=1)

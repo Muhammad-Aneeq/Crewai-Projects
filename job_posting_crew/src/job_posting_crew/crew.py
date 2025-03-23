@@ -1,5 +1,5 @@
 from typing import List
-from crewai import Agent, Task, Process, Crew
+from crewai import Agent, Task, Process, Crew, LLM
 from crewai.project import agent, task, crew, CrewBase
 from crewai_tools import SerperDevTool, ScrapeWebsiteTool, WebsiteSearchTool, FileReadTool
 from pydantic import BaseModel
@@ -24,6 +24,11 @@ class ResearchRoleRequirements(BaseModel):
 @CrewBase
 class JobPostingCrew:
 	"""JobPosting Crew"""
+
+	llm = LLM(
+        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gemini/gemini-1.5-flash"
+    )
      
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
@@ -32,21 +37,27 @@ class JobPostingCrew:
 	def research_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['research_agent'],
-			tools=[web_search_tool,seper_dev_tool]
+			tools=[web_search_tool,seper_dev_tool],
+			llm=self.llm,
+			max_rpm=10
 		)
 	
 	@agent
 	def writer_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['writer_agent'],
-			tools=[web_search_tool,seper_dev_tool, file_read_tool]
+			tools=[web_search_tool,seper_dev_tool, file_read_tool],
+			llm=self.llm,
+			max_rpm=10
 		)
 	
 	@agent
 	def review_agent(self) -> Agent:
 		return Agent(
 			config=self.agents_config['review_agent'],
-			tools=[web_search_tool,seper_dev_tool, file_read_tool]
+			tools=[web_search_tool,seper_dev_tool, file_read_tool],
+			llm=self.llm,
+			max_rpm=10
 		)
 	
 	
