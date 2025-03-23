@@ -1,11 +1,17 @@
 from typing import List
-from crewai import Agent, Task, Process, Crew
+from crewai import Agent, Task, Process, Crew, LLM
 from crewai.project import CrewBase, agent , crew, task
+import os
 
 
 @CrewBase
 class GameBuilderCrew:
     """GameBuilder Crew"""
+
+    llm = LLM(
+        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gemini/gemini-1.5-flash"
+    )
     
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
@@ -14,6 +20,8 @@ class GameBuilderCrew:
     def senior_engineer_agent(self) -> Agent:
         return Agent(
             config=self.agents_config["senior_engineer_agent"],
+            llm=self.llm,
+            max_rpm=10,
             allow_delegation=False,
 		)
     
@@ -21,6 +29,8 @@ class GameBuilderCrew:
     def qa_engineer_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['qa_engineer_agent'],
+            llm=self.llm,
+            max_rpm=10,
             allow_delegation=False,
         )
     
@@ -28,6 +38,8 @@ class GameBuilderCrew:
     def chief_qa_engineer_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['chief_qa_engineer_agent'],
+            llm=self.llm,
+            max_rpm=10,
             allow_delegation=True,
             verbose=True
         )
