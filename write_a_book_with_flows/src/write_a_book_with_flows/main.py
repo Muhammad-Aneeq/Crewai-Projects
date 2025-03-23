@@ -13,14 +13,14 @@ import streamlit as st
 
 class BookState(BaseModel):
     id: uuid.UUID = uuid.uuid4()
-    title: str = "The Current State of AI in February 2025"
+    title: str = "The Current State of AI in March 2025"
     book: List[Chapter] = []
     book_outline: List[ChapterOutline] = []
     topic: str = (
-        "Exploring the latest trends in AI across different industries as of February 2025"
+        "Exploring the latest trends in AI across different industries as of March 2025"
     )
     goal: str = """
-        The goal of this book is to provide a comprehensive overview of the current state of artificial intelligence in February 2025.
+        The goal of this book is to provide a comprehensive overview of the current state of artificial intelligence in March 2025.
         It will delve into the latest trends impacting various industries, analyze significant advancements,
         and discuss potential future developments. The book aims to inform readers about cutting-edge AI technologies
         and prepare them for upcoming innovations in the field.
@@ -137,12 +137,12 @@ def main():
     st.write("Enter the details for your book and generate an AI-driven book on the current state of AI.")
 
     # Capture user input for title, topic, and goal
-    title = st.text_input("Book Title", "The Current State of AI in February 2025")
-    topic = st.text_area("Book Topic", "Exploring the latest trends in AI across different industries as of February 2025")
+    title = st.text_input("Book Title", "The Current State of AI in March 2025")
+    topic = st.text_area("Book Topic", "Exploring the latest trends in AI across different industries as of March 2025")
     goal = st.text_area(
         "Book Goal",
         """
-        The goal of this book is to provide a comprehensive overview of the current state of artificial intelligence in February 2025.
+        The goal of this book is to provide a comprehensive overview of the current state of artificial intelligence in March 2025.
         It will delve into the latest trends impacting various industries, analyze significant advancements,
         and discuss potential future developments. The book aims to inform readers about cutting-edge AI technologies
         and prepare them for upcoming innovations in the field.

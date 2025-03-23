@@ -1,7 +1,8 @@
-from crewai import Agent, Crew, Process, Task
+from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
 from langchain_openai import ChatOpenAI
+import os
 
 from write_a_book_with_flows.types import BookOutline
 
@@ -9,6 +10,11 @@ from write_a_book_with_flows.types import BookOutline
 @CrewBase
 class OutlineCrew:
     """Book Outline Crew"""
+
+    llm = LLM(
+        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gemini/gemini-1.5-flash"
+    )
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
@@ -19,6 +25,8 @@ class OutlineCrew:
         return Agent(
             config=self.agents_config["researcher"],
             tools=[search_tool],
+            llm=self.llm,
+            max_rpm=10,
             verbose=False,
         )
 
@@ -26,6 +34,8 @@ class OutlineCrew:
     def outliner(self) -> Agent:
         return Agent(
             config=self.agents_config["outliner"],
+            llm=self.llm,
+            max_rpm=10,
             verbose=False,
         )
 
