@@ -3,7 +3,7 @@ from crewai.project import agent, task, crew, CrewBase
 from stock_analysis_crew.tools.calculator_tool import CalculatorTool
 from stock_analysis_crew.tools.sec_tools import SEC10KTool, SEC10QTool
 from crewai_tools import WebsiteSearchTool, ScrapeWebsiteTool, TXTSearchTool, RagTool
-
+import os
 
 def get_tool_config():
     return {
@@ -24,6 +24,11 @@ def get_tool_config():
 @CrewBase
 class StockAnalysisCrew:
     """Stock Analysis Crew"""
+
+    llm = LLM(
+        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gemini/gemini-1.5-flash"
+    )
 
     agents_config = "config/agents.yaml"
     tasks_config = "config/tasks.yaml"
@@ -50,6 +55,8 @@ class StockAnalysisCrew:
     def financial_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config["financial_analyst"],
+            llm=self.llm,
+            max_rpm=10,
             tools=[
                 self.scrape_website_tool,
                 self.website_search_tool,
@@ -62,6 +69,8 @@ class StockAnalysisCrew:
     def research_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config["research_analyst"],
+            llm=self.llm,
+            max_rpm=10,
             tools=[
                 self.scrape_website_tool,
                 self.financial_rag_tool,
@@ -72,6 +81,8 @@ class StockAnalysisCrew:
     def investment_advisor(self) -> Agent:
         return Agent(
             config=self.agents_config["investment_advisor"],
+            llm=self.llm,
+            max_rpm=10,
             tools=[
                 self.scrape_website_tool,
                 self.website_search_tool,
