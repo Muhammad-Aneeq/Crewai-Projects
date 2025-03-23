@@ -45,7 +45,7 @@ class SalesFlow(Flow):
     if hasattr(score.pydantic, 'lead_score') 
     and score.pydantic.lead_score is not None 
     and score.pydantic.lead_score.score is not None 
-    and score.pydantic.lead_score.score > 70
+    and score.pydantic.lead_score.score > 50
 ]
 
     @listen(filter_leads)
