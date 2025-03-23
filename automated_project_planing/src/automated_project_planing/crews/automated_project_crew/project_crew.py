@@ -1,11 +1,16 @@
-from crewai import Crew, Agent, Task,Process
+from crewai import Crew, Agent, Task,Process, LLM
 from crewai.project import CrewBase, agent, crew, task
 from automated_project_planing.types import ProjectPlan
-
+import os
 
 @CrewBase
 class ProjectCrew:
     """Project Crew"""
+
+    llm = LLM(
+        api_key=os.getenv("GEMINI_API_KEY"),
+        model="gemini/gemini-1.5-flash"
+    )
 
 
     agents_config = "config/agents.yaml"
@@ -15,19 +20,25 @@ class ProjectCrew:
     @agent
     def project_planning_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config["project_planning_agent"]
+            config=self.agents_config["project_planning_agent"],
+            llm=self.llm,
+            max_rpm=10
         )
     
     @agent
     def estimation_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config["estimation_agent"]
+            config=self.agents_config["estimation_agent"],
+            llm=self.llm,
+            max_rpm=10
         )
     
     @agent
     def resource_allocation_agent(self) -> Agent:
         return Agent(
-            config=self.agents_config["resource_allocation_agent"]
+            config=self.agents_config["resource_allocation_agent"],
+            llm=self.llm,
+            max_rpm=10
         )
     
     # Creating Tasks
